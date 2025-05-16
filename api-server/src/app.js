@@ -10,14 +10,14 @@ app.use(express.json());
 
 // Initialize connections
 await connectDB();
+const natsClient = await connectNATS();
 
+//NATS Subscription
+natsClient.subscribe('crypto.update', () => {
+  console.log('Received update trigger');
+  fetchAndStoreStats();
+});
 
-// NATS Subscription
-// natsClient.subscribe('crypto.update', () => {
-//   console.log('Received update trigger');
-//   fetchAndStoreStats();
-// });
-fetchAndStoreStats()
 
 // Routes
 app.get('/stats', getStats);
